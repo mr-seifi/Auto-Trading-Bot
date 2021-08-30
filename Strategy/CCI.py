@@ -29,7 +29,7 @@ class CCI:
                 time.sleep(17)
                 cci_value = self.__taapi.get_cci(symbol=symbol_ta,
                                                  interval='5m')
-            current_price = float(self.__iex.get_quote(symbol_iex)['latestPrice'])
+            current_price = self.__iex.get_price(symbol_iex)
             goal_price = goal_coefficient * current_price
             stop_price = stop_coefficient * current_price
             msg = f'[+] Order executed!\n' \
@@ -42,7 +42,7 @@ class CCI:
             print(msg)
             while stop_price < current_price < goal_price:
                 status = True
-                current_price = float(self.__iex.get_quote(symbol_iex)['latestPrice'])
+                current_price = self.__iex.get_price(symbol_iex)
                 time.sleep(2)
             status = False
             if current_price >= goal_price:
