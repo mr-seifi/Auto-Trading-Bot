@@ -11,12 +11,12 @@ import requests
 
 class IEXCloud:
 
-    def __init__(self, token):  # A simple constructor from IEXCloud class
+    def __init__(self, token):  # A simple constructor for IEXCloud class
         self.__BASE_URL = 'https://cloud.iexapis.com/stable/crypto'
         self.__API_TOKEN = token
 
     def get_quote(self, symbol):  # This method return quote(info) of your crypto that identified by a symbol
-        url = f'{self.__BASE_URL}/{symbol}/quote?token={self.__API_TOKEN}'  # Create API URL
+        url = f'{self.__BASE_URL}/{symbol}/quote?token={self.__API_TOKEN}'  # Create an API URL
         result = requests.get(url)  # Send GET request to IEX Cloud servers
         if result.status_code != 200:  # If the result of your request is not ok throw exception
             raise RuntimeError('IEXCloud (get_quote): cannot connect to url (err code: %s)!' % result.status_code)
