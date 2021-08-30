@@ -12,8 +12,8 @@ class CCI:
         self.__tel = Telegram_obj
 
     def cci_5m(self, symbol_iex, symbol_ta, verbose=True):
-        goal_coefficient = 1.00350
-        stop_coefficient = 0.99280
+        goal_coefficient = 1.00000 + 0.00310
+        stop_coefficient = 1.00000 - 0.00620
         current_price = None
         goal_price = None
         stop_price = None
@@ -26,9 +26,9 @@ class CCI:
             print(msg)
         else:
             while cci_value < -100:
+                time.sleep(17)
                 cci_value = self.__taapi.get_cci(symbol=symbol_ta,
                                                  interval='5m')
-                time.sleep(15)
             current_price = float(self.__iex.get_quote(symbol_iex)['latestPrice'])
             goal_price = goal_coefficient * current_price
             stop_price = stop_coefficient * current_price
@@ -43,9 +43,7 @@ class CCI:
             while stop_price < current_price < goal_price:
                 status = True
                 current_price = float(self.__iex.get_quote(symbol_iex)['latestPrice'])
-                goal_price = goal_coefficient * current_price
-                stop_price = stop_coefficient * current_price
-                time.sleep(15)
+                time.sleep(2)
             status = False
             if current_price >= goal_price:
                 msg = f'[+] You earn {(goal_coefficient - 1) * 100}% of your account! nice job.'

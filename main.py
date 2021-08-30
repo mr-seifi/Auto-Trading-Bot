@@ -21,7 +21,7 @@ try:
         cci_obj.cci_5m(symbol_iex='BTCUSDT',
                        symbol_ta='BTC/USDT',
                        verbose=True)
-        time.sleep(15)
+        time.sleep(17)
 
 except Exception as ex:
     print('main: %s' % ex)
