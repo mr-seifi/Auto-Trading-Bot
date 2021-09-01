@@ -13,9 +13,9 @@ class KuCoin:
         self.__API_SECRETS = API_SECRETS
         self.__API_PASSPHRASE = API_PASSPHRASE
 
-    def authentication(self):
+    def authentication(self, request_type: str, endpoint: str):
         now = int(time.time() * 1000)
-        str_to_sign = str(now) + 'GET' + '/api/v1/accounts'
+        str_to_sign = str(now) + request_type.upper() + endpoint
         signature = base64.b64encode(
             hmac.new(self.__API_SECRETS.encode('utf-8'), str_to_sign.encode('utf-8'), hashlib.sha256).digest())
         passphrase = base64.b64encode(
@@ -31,16 +31,20 @@ class KuCoin:
         return headers
 
     def get_sub_user(self):
-        url = f'{self.__BASE_URL}/api/v1/sub/user'
-        headers = self.authentication()
-        response = requests.request('get', url, headers=headers)
+        req_type = 'GET'
+        endpoint = '/api/v1/sub/user'
+        url = f'{self.__BASE_URL}{endpoint}'
+        headers = self.authentication(req_type, endpoint)
+        response = requests.request(req_type.lower(), url, headers=headers)
         print(response.status_code)
         print(response.json())
 
     def get_accounts(self):
-        url = f'{self.__BASE_URL}/api/v1/accounts'
-        headers = self.authentication()
-        response = requests.request('get', url, headers=headers)
+        req_type = 'GET'
+        endpoint = '/api/v1/accounts'
+        url = f'{self.__BASE_URL}{endpoint}'
+        headers = self.authentication(req_type, endpoint)
+        response = requests.request(req_type.lower(), url, headers=headers)
         print(response.status_code)
         print(response.json())
 
