@@ -46,7 +46,51 @@ class KuCoin:
         req_type = 'GET'
         endpoint = '/api/v1/transaction-history'
         url = f'{self.__BASE_URL}{endpoint}'
-        headers = self.authentication(req_type, endpoint)
+        headers = self.authentication(request_type=req_type,
+                                      endpoint=endpoint)
+        response = requests.request(req_type.lower(), url, headers=headers)
+        print(response.status_code)
+        print(response.json())
+
+    def place_market_order(self, clientOid, side='buy', symbol='XBTUSDTM', type='market', leverage='100', size=5):
+        req_type = 'POST'
+        endpoint = '/api/v1/orders'
+        url = f'{self.__BASE_URL}{endpoint}'
+        data = {'clientOid': clientOid,
+                'side': side,
+                'symbol': symbol,
+                'type': type,
+                'leverage': leverage,
+                'size': size}
+        data_json = json.dumps(data)
+        headers = self.authentication(request_type=req_type,
+                                      endpoint=endpoint,
+                                      data_json=data_json)
+        response = requests.request(req_type.lower(), url, headers=headers, data=data_json)
+        print(response.status_code)
+        print(response.json())
+
+    def close_market_order(self, clientOid: str, symbol='XBTUSDTM'):
+        req_type = 'POST'
+        endpoint = '/api/v1/orders'
+        url = f'{self.__BASE_URL}{endpoint}'
+        data = {'clientOid': clientOid,
+                'symbol': symbol,
+                'closeOrder': True}
+        data_json = json.dumps(data)
+        headers = self.authentication(request_type=req_type,
+                                      endpoint=endpoint,
+                                      data_json=data_json)
+        response = requests.request(req_type.lower(), url, headers=headers, data=data_json)
+        print(response.status_code)
+        print(response.json())
+
+    def get_orders_list(self):
+        req_type = 'GET'
+        endpoint = '/api/v1/orders'
+        url = f'{self.__BASE_URL}{endpoint}'
+        headers = self.authentication(request_type=req_type,
+                                      endpoint=endpoint)
         response = requests.request(req_type.lower(), url, headers=headers)
         print(response.status_code)
         print(response.json())

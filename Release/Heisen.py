@@ -7,3 +7,5 @@ class Heisen:
 
     def exec(self):
         self.__connection.get_accounts_overview()
+        self.__connection.place_market_order(clientOid='123_ABC')
+        self.__connection.get_orders_list()
