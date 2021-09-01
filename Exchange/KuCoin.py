@@ -17,7 +17,7 @@ class KuCoin:
 
     def authentication(self, request_type: str, endpoint: str, data_json=''):
         now = int(time.time() * 1000)
-        str_to_sign = str(now) + request_type.upper() + endpoint + data
+        str_to_sign = str(now) + request_type.upper() + endpoint + data_json
         signature = base64.b64encode(
             hmac.new(self.__API_SECRETS.encode('utf-8'), str_to_sign.encode('utf-8'), hashlib.sha256).digest())
         passphrase = base64.b64encode(
