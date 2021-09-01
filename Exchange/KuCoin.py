@@ -32,11 +32,12 @@ class KuCoin:
         }
         return headers
 
-    def get_accounts_overview(self):
+    def get_accounts_overview(self, currency='USDT'):
         req_type = 'GET'
-        endpoint = '/api/v1/account-overview'
+        endpoint = f'/api/v1/account-overview?currency={currency}'
         url = f'{self.__BASE_URL}{endpoint}'
-        headers = self.authentication(req_type, endpoint)
+        headers = self.authentication(request_type=req_type,
+                                      endpoint=endpoint)
         response = requests.request(req_type.lower(), url, headers=headers)
         print(response.status_code)
         print(response.json())

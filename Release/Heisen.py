@@ -6,4 +6,4 @@ class Heisen:
         self.__connection = KCConnection
 
     def exec(self):
-        self.__connection.get_transaction_history()
+        self.__connection.get_accounts_overview()
