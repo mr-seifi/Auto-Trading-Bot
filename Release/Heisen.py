@@ -6,4 +6,4 @@ class Heisen:
         self.__connection = KCConnection
 
     def exec(self):
-        self.__connection.get_sub_user()
+        self.__connection.create_account()
