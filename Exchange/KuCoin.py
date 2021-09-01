@@ -36,7 +36,7 @@ class KuCoin:
         req_type = 'POST'
         endpoint = '/api/v1/accounts'
         url = f'{self.__BASE_URL}{endpoint}'
-        data = {'type': 'trade',
+        data = {'type': 'TRADE',
                 'currency': 'BTC'}
         data_json = json.dumps(data)
         headers = self.authentication(request_type=req_type,
