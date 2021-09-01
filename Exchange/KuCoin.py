@@ -1,3 +1,5 @@
+import json
+
 import requests
 import time
 import base64
@@ -37,7 +39,8 @@ class KuCoin:
         headers = self.authentication(req_type, endpoint)
         data = {'type': 'trade',
                 'currency': 'BTC'}
-        response = requests.request(req_type.lower(), url, headers=headers, data=data)
+        data_json = json.dumps(data)
+        response = requests.request(req_type.lower(), url, headers=headers, data=data_json)
         print(response.status_code)
         print(response.json())
 
