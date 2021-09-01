@@ -6,9 +6,10 @@ import time
 
 class CCI:
 
-    def __init__(self, IEXCloud_obj: IEXCloud, TAAPI_obj: TAAPI, Telegram_obj: Telegram):
+    def __init__(self, IEXCloud_obj: IEXCloud, TAAPI_obj: TAAPI, TAAPI_obj2: TAAPI, Telegram_obj: Telegram):
         self.__iex = IEXCloud_obj
         self.__taapi = TAAPI_obj
+        self.__taapi2 = TAAPI_obj2
         self.__tel = Telegram_obj
 
     def cci_5m(self, symbol_iex, symbol_ta, verbose=True):
@@ -24,37 +25,50 @@ class CCI:
         if -100 < cci_value:
             msg = f'[-] Not found good entry point (cci = {cci_value})'
             print(msg)
-        else:
-            while cci_value < -100:
-                time.sleep(17)
-                cci_value = self.__taapi.get_cci(symbol=symbol_ta,
-                                                 interval='5m')
+
+            return -1
+
+        while cci_value < -100:
+            time.sleep(17)
+            cci_value = self.__taapi.get_cci(symbol=symbol_ta,
+                                             interval='5m')
+            msg = f'[+] Waiting for a good point! (cci = {cci_value})'
+            print(msg)
+
+        cci_1h_value = self.__taapi2.get_cci(symbol=symbol_ta,
+                                             interval='1h')
+        if cci_1h_value > -50:
+            msg = f'[-] Not found good entry point (cci 1h = {cci_1h_value})'
+            print(msg)
+
+            return -1
+
+        current_price = self.__iex.get_price(symbol_iex)
+        entry_price = current_price
+        goal_price = goal_coefficient * current_price
+        stop_price = stop_coefficient * current_price
+        msg = f'[+] Order executed!\n' \
+              f'\tCurrent_price = {current_price}$\n' \
+              f'\tTarget_price = {goal_price}$ ({(goal_coefficient - 1) * 100}%)\n' \
+              f'\tStopLoss_price = {stop_price}$ ({(stop_coefficient - 1) * 100}%).'
+        if verbose:
+            self.__tel.msg_channel(msg)
+
+        print(msg)
+        while stop_price < current_price < goal_price:
+            status = True
             current_price = self.__iex.get_price(symbol_iex)
-            entry_price = current_price
-            goal_price = goal_coefficient * current_price
-            stop_price = stop_coefficient * current_price
-            msg = f'[+] Order executed!\n' \
-                  f'\tCurrent_price = {current_price}$\n' \
-                  f'\tTarget_price = {goal_price}$ ({(goal_coefficient - 1) * 100}%)\n' \
-                  f'\tStopLoss_price = {stop_price}$ ({(stop_coefficient - 1) * 100}%).'
+            print(f'[+] In position, {100 * (current_price - entry_price) / (goal_price - entry_price)}%'
+                  f' to achieve your goal!')
+            time.sleep(2)
+        status = False
+        if current_price >= goal_price:
+            msg = f'[+] You earn {(goal_coefficient - 1) * 100}% of your account! nice job.'
             if verbose:
                 self.__tel.msg_channel(msg)
-
             print(msg)
-            while stop_price < current_price < goal_price:
-                status = True
-                current_price = self.__iex.get_price(symbol_iex)
-                print(f'[+] In position, {100 * (current_price - entry_price) / (goal_price - entry_price)}%'
-                      f' to achieve your goal!')
-                time.sleep(2)
-            status = False
-            if current_price >= goal_price:
-                msg = f'[+] You earn {(goal_coefficient - 1) * 100}% of your account! nice job.'
-                if verbose:
-                    self.__tel.msg_channel(msg)
-                print(msg)
-            elif current_price <= stop_price:
-                msg = f'[-] You loss {(stop_coefficient - 1) * 100}% of your account! see you soon.'
-                if verbose:
-                    self.__tel.msg_channel(msg)
-                print(msg)
+        elif current_price <= stop_price:
+            msg = f'[-] You loss {(stop_coefficient - 1) * 100}% of your account! see you soon.'
+            if verbose:
+                self.__tel.msg_channel(msg)
+            print(msg)

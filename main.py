@@ -4,6 +4,7 @@ from CoreData.IEXCloud import IEXCloud
 from Strategy.CCI import CCI
 from Notification.Telegram import Telegram
 from secrets import TAAPI_API_TOKEN
+from secrets import TAAPI_API_TOKEN_2
 from secrets import IEX_CLOUD_API_TOKEN
 from secrets import TELEGRAM_CHANNEL_ID
 from secrets import TELEGRAM_BOT_API_TOKEN
@@ -11,11 +12,13 @@ from secrets import TELEGRAM_BOT_API_TOKEN
 try:
     iex_obj = IEXCloud(IEX_CLOUD_API_TOKEN)  # Create IEXCloud object that gives the bot last crypto price
     taapi_obj = TAAPI(TAAPI_API_TOKEN)  # Create TAAPI object that gives the bot indicators values
+    taapi_obj2 = TAAPI(TAAPI_API_TOKEN_2)
     telegram_obj = Telegram(token=TELEGRAM_BOT_API_TOKEN,
                             channel_id=TELEGRAM_CHANNEL_ID)  # Create Telegram object that gives the bot the ability
     # of sending logs to telegram channel
     cci_obj = CCI(IEXCloud_obj=iex_obj,
                   TAAPI_obj=taapi_obj,
+                  TAAPI_obj2=taapi_obj2,
                   Telegram_obj=telegram_obj)  # Create CCI object that gives the bot the ability of technical
     # analysis and get along with cci indicator
     telegram_obj.msg_channel('[+] Start working!')  # Send message as notice the user that I'm start
