@@ -55,4 +55,10 @@ def exec_strategy():
         print('main: %s' % ex)
 
 
+def emergency_close():
+    telegram_obj = Telegram(token=TELEGRAM_BOT_API_TOKEN,
+                            channel_id=TELEGRAM_CHANNEL_ID)
+    telegram_obj.start_polling()
+
+
 exec_bot()
