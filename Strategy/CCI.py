@@ -38,13 +38,13 @@ class CCI:
             msg = f'[+] Waiting for a good point! (cci = {cci_value})'
             print(msg)
 
-        # cci_1h_value = self.__taapi2.get_cci(symbol=symbol_ta,
-        #                                      interval='1h')
-        # if cci_1h_value > -50:
-        #     msg = f'[-] Not found good entry point (cci 1h = {cci_1h_value})'
-        #     print(msg)
-        #
-        #     return -1
+        cci_1h_value = self.__taapi2.get_cci(symbol=symbol_ta,
+                                             interval='1h')
+        if cci_1h_value > -40:
+            msg = f'[-] Not found good entry point (cci 1h = {cci_1h_value})'
+            print(msg)
+
+            return -1
 
         current_price = self.__connection.get_current_mark_price()
         entry_price = current_price
