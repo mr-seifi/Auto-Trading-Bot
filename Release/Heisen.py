@@ -17,6 +17,8 @@ class Heisen:
 
     def exec(self):
         try:
+            file = open('Assets/Emergency_Close.dat', 'w')
+            file.close()
             self.__Telegram_obj.msg_channel('[+] Start working!')  # Send message as notice the user that I'm start
             while True:
                 try:
