@@ -28,7 +28,8 @@ class KuCoin:
             "KC-API-TIMESTAMP": str(now),
             "KC-API-KEY": self.__API_KEY,
             "KC-API-PASSPHRASE": passphrase,
-            "KC-API-KEY-VERSION": '2'
+            "KC-API-KEY-VERSION": '2',
+            "Content-Type": 'application/json'
         }
         return headers
 
@@ -76,7 +77,7 @@ class KuCoin:
         url = f'{self.__BASE_URL}{endpoint}'
         data = {'clientOid': clientOid,
                 'symbol': symbol,
-                'closeOrder': True}
+                'type': 'market',                'closeOrder': True}
         data_json = json.dumps(data)
         headers = self.authentication(request_type=req_type,
                                       endpoint=endpoint,
