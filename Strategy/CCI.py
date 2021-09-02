@@ -48,7 +48,7 @@ class CCI:
 
         current_price = self.__connection.get_current_mark_price()
         entry_price = current_price
-        lots = int((1e5 * self.__size / current_price) - 10)
+        lots = int((1e5 * self.__size / current_price))
         goal_price = goal_coefficient * current_price
         stop_price = stop_coefficient * current_price
         self.__connection.place_market_order(clientOid='heisen_order', size=lots)
@@ -60,6 +60,8 @@ class CCI:
             self.__tel.msg_channel(msg)
 
         print(msg)
+        file = open('Assets/Emergency_Close.dat', 'w')
+        file.close()
         while stop_price < current_price < goal_price:
             status = True
             current_price = self.__connection.get_current_mark_price()
