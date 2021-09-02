@@ -72,26 +72,25 @@ class CCI:
                 break
             file.close()
             time.sleep(2)
+        self.__connection.close_market_order(clientOid='heisen_order')
         status = False
-        if current_price >= goal_price:
-            self.__connection.close_market_order(clientOid='heisen_order')
-            msg = f'[+] You earn {(goal_coefficient - 1) * 100}% of your account! nice job.'
-            if verbose:
-                self.__tel.msg_channel(msg)
-            print(msg)
-        elif current_price <= stop_price:
-            self.__connection.close_market_order(clientOid='heisen_order')
-            msg = f'[-] You loss {(stop_coefficient - 1) * 100}% of your account! see you soon.'
-            if verbose:
-                self.__tel.msg_channel(msg)
-            print(msg)
-        else:
-            notation = ''
-            if current_price > entry_price:
-                notation = '+'
-            else:
-                notation = '-'
-            msg = f'[{notation}] You got {100 * (current_price - entry_price) / (goal_price - entry_price)}% of your account!'
-            if verbose:
-                self.__tel.msg_channel(msg)
-            print(msg)
+        msg = f'UnrealisedPNL = {100 * (current_price - entry_price) / (goal_price - entry_price)}%'
+        if verbose:
+            self.__tel.msg_channel(msg)
+        print(msg)
+
+        # --------------------------------- Notifier -----------------------------------------
+        # if current_price >= goal_price:
+        #     self.__connection.close_market_order(clientOid='heisen_order')
+        #     msg = f'[+] You earn {(goal_coefficient - 1) * 100}% of your account! nice job.'
+        #     if verbose:
+        #         self.__tel.msg_channel(msg)
+        #     print(msg)
+        # elif current_price <= stop_price:
+        #     self.__connection.close_market_order(clientOid='heisen_order')
+        #     msg = f'[-] You loss {(stop_coefficient - 1) * 100}% of your account! see you soon.'
+        #     if verbose:
+        #         self.__tel.msg_channel(msg)
+        #     print(msg)
+        # else:
+
