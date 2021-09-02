@@ -106,6 +106,17 @@ class KuCoin:
         print(response.status_code)
         print(response.json())
 
+    def get_current_mark_price(self, symbol='XBTUSDTM'):
+        req_type = 'GET'
+        endpoint = f'/api/v1/mark-price/{symbol}/current'
+        url = f'{self.__BASE_URL}{endpoint}'
+        headers = self.authentication(request_type=req_type,
+                                      endpoint=endpoint)
+        response = requests.request(req_type.lower(), url, headers=headers)
+        print(response.status_code)
+        print(response.json())
+        return response.json()['data']['value']
+
 
 # Error Codes
 """

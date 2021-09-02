@@ -47,4 +47,5 @@ def emergency_close():
 
 
 # --------------------------------------------- Execute ---------------------------------------------
-exec_heisen_bot()
+# exec_heisen_bot()
+print(kucoin_obj.get_current_mark_price())

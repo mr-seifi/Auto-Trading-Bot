@@ -45,7 +45,7 @@ class CCI:
 
             return -1
 
-        current_price = self.__iex.get_price(symbol_iex)
+        current_price = self.__connection.get_current_mark_price()
         entry_price = current_price
         goal_price = goal_coefficient * current_price
         stop_price = stop_coefficient * current_price
@@ -60,7 +60,7 @@ class CCI:
         print(msg)
         while stop_price < current_price < goal_price:
             status = True
-            current_price = self.__iex.get_price(symbol_iex)
+            current_price = self.__connection.get_current_mark_price()
             print(f'[+] In position, {100 * (current_price - entry_price) / (goal_price - entry_price)}%'
                   f' to achieve your goal!')
             file = open('Assets/Emergency_Close.dat', 'r')
