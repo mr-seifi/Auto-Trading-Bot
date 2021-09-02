@@ -17,9 +17,13 @@ class Telegram:
 
     @staticmethod
     def authenticator(update: Update) -> bool:
-        if update.effective_user.id == 100136658:
+        if update.effective_user.id == 100136658 or update.effective_user.id == 438963856:
             return True
         return False
+
+    def hi(self, update: Update, context: CallbackContext):
+        if self.authenticator(update=update):
+            update.message.reply_text(text='Hello my friend!')
 
     def close(self, update: Update, context: CallbackContext):
         if self.authenticator(update=update):
@@ -33,6 +37,8 @@ class Telegram:
                                         chat_id=self.__channel_id)
 
     def start_polling(self):
+        hi_handler = CommandHandler('hi', self.hi)
         close_handler = CommandHandler('close', self.close)
+        self.__dispatcher.add_handler(hi_handler)
         self.__dispatcher.add_handler(close_handler)
         self.__updater.start_polling()
