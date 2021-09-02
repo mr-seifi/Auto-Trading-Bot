@@ -40,7 +40,7 @@ class CCI:
 
         cci_1h_value = self.__taapi2.get_cci(symbol=symbol_ta,
                                              interval='1h')
-        if cci_1h_value > 45:
+        if cci_1h_value > -50:
             msg = f'[-] Not found good entry point (cci 1h = {cci_1h_value})'
             print(msg)
             return -1

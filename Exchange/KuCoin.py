@@ -53,7 +53,7 @@ class KuCoin:
         print(response.status_code)
         print(response.json())
 
-    def place_market_order(self, clientOid, side='buy', symbol='XBTUSDTM', type='market', leverage='100', size=5):
+    def place_market_order(self, clientOid, side='buy', symbol='XBTUSDTM', type='market', leverage='80', size=5):
         req_type = 'POST'
         endpoint = '/api/v1/orders'
         url = f'{self.__BASE_URL}{endpoint}'

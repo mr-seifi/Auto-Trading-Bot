@@ -30,7 +30,7 @@ cci_obj = CCI(IEXCloud_obj=iex_obj,
               TAAPI_obj2=taapi_obj2,
               Telegram_obj=telegram_obj,
               KuCoin_connection=kucoin_obj,
-              size=50)  # Create CCI object that gives the bot the ability of technical
+              size=45)  # Create CCI object that gives the bot the ability of technical
 # analysis and get along with cci indicator
 
 
