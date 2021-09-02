@@ -1,16 +1,18 @@
+import time
 from CoreData.IEXCloud import IEXCloud
 from CoreData.TAAPI import TAAPI
 from Notification.Telegram import Telegram
-import time
+from Exchange.KuCoin import KuCoin
 
 
 class CCI:
 
-    def __init__(self, IEXCloud_obj: IEXCloud, TAAPI_obj: TAAPI, TAAPI_obj2: TAAPI, Telegram_obj: Telegram):
+    def __init__(self, IEXCloud_obj: IEXCloud, TAAPI_obj: TAAPI, TAAPI_obj2: TAAPI, Telegram_obj: Telegram, KuCoin_connection: KuCoin):
         self.__iex = IEXCloud_obj
         self.__taapi = TAAPI_obj
         self.__taapi2 = TAAPI_obj2
         self.__tel = Telegram_obj
+        self.__connection = KuCoin_connection
 
     def cci_5m(self, symbol_iex, symbol_ta, verbose=True):
         goal_coefficient = 1.00000 + 0.00310
@@ -47,6 +49,7 @@ class CCI:
         entry_price = current_price
         goal_price = goal_coefficient * current_price
         stop_price = stop_coefficient * current_price
+        self.__connection.place_market_order(clientOid='heisen_order')
         msg = f'[+] Order executed!\n' \
               f'\tCurrent_price = {current_price}$\n' \
               f'\tTarget_price = {goal_price}$ ({(goal_coefficient - 1) * 100}%)\n' \
@@ -63,11 +66,13 @@ class CCI:
             time.sleep(2)
         status = False
         if current_price >= goal_price:
+            self.__connection.close_market_order(clientOid='heisen_order')
             msg = f'[+] You earn {(goal_coefficient - 1) * 100}% of your account! nice job.'
             if verbose:
                 self.__tel.msg_channel(msg)
             print(msg)
         elif current_price <= stop_price:
+            self.__connection.close_market_order(clientOid='heisen_order')
             msg = f'[-] You loss {(stop_coefficient - 1) * 100}% of your account! see you soon.'
             if verbose:
                 self.__tel.msg_channel(msg)

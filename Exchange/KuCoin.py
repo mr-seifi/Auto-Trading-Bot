@@ -45,7 +45,7 @@ class KuCoin:
 
     def get_transaction_history(self):
         req_type = 'GET'
-        endpoint = '/api/v1/transaction-history'
+        endpoint = '/api/v1/transaction-history?type=RealisedPNL'
         url = f'{self.__BASE_URL}{endpoint}'
         headers = self.authentication(request_type=req_type,
                                       endpoint=endpoint)
@@ -89,6 +89,16 @@ class KuCoin:
     def get_orders_list(self):
         req_type = 'GET'
         endpoint = '/api/v1/orders'
+        url = f'{self.__BASE_URL}{endpoint}'
+        headers = self.authentication(request_type=req_type,
+                                      endpoint=endpoint)
+        response = requests.request(req_type.lower(), url, headers=headers)
+        print(response.status_code)
+        print(response.json())
+
+    def get_positions_list(self):
+        req_type = 'GET'
+        endpoint = f'/api/v1/positions'
         url = f'{self.__BASE_URL}{endpoint}'
         headers = self.authentication(request_type=req_type,
                                       endpoint=endpoint)
