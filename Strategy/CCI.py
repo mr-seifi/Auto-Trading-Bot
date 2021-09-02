@@ -7,12 +7,13 @@ from Exchange.KuCoin import KuCoin
 
 class CCI:
 
-    def __init__(self, IEXCloud_obj: IEXCloud, TAAPI_obj: TAAPI, TAAPI_obj2: TAAPI, Telegram_obj: Telegram, KuCoin_connection: KuCoin):
+    def __init__(self, IEXCloud_obj: IEXCloud, TAAPI_obj: TAAPI, TAAPI_obj2: TAAPI, Telegram_obj: Telegram, KuCoin_connection: KuCoin, size: float):
         self.__iex = IEXCloud_obj
         self.__taapi = TAAPI_obj
         self.__taapi2 = TAAPI_obj2
         self.__tel = Telegram_obj
         self.__connection = KuCoin_connection
+        self.__size = size
 
     def cci_5m(self, symbol_iex, symbol_ta, verbose=True):
         goal_coefficient = 1.00000 + 0.00310
@@ -37,19 +38,20 @@ class CCI:
             msg = f'[+] Waiting for a good point! (cci = {cci_value})'
             print(msg)
 
-        cci_1h_value = self.__taapi2.get_cci(symbol=symbol_ta,
-                                             interval='1h')
-        if cci_1h_value > -50:
-            msg = f'[-] Not found good entry point (cci 1h = {cci_1h_value})'
-            print(msg)
-
-            return -1
+        # cci_1h_value = self.__taapi2.get_cci(symbol=symbol_ta,
+        #                                      interval='1h')
+        # if cci_1h_value > -50:
+        #     msg = f'[-] Not found good entry point (cci 1h = {cci_1h_value})'
+        #     print(msg)
+        #
+        #     return -1
 
         current_price = self.__connection.get_current_mark_price()
         entry_price = current_price
+        lots = int((1e5 * self.__size / current_price) - 10)
         goal_price = goal_coefficient * current_price
         stop_price = stop_coefficient * current_price
-        self.__connection.place_market_order(clientOid='heisen_order')
+        self.__connection.place_market_order(clientOid='heisen_order', size=lots)
         msg = f'[+] Order executed!\n' \
               f'\tCurrent_price = {current_price}$\n' \
               f'\tTarget_price = {goal_price}$ ({(goal_coefficient - 1) * 100}%)\n' \
