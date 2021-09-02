@@ -63,6 +63,14 @@ class CCI:
             current_price = self.__iex.get_price(symbol_iex)
             print(f'[+] In position, {100 * (current_price - entry_price) / (goal_price - entry_price)}%'
                   f' to achieve your goal!')
+            file = open('Assets/Emergency_Close.dat', 'r')
+            if file.read() == '-1':
+                self.__connection.close_market_order(clientOid='heisen_order')
+                file.close()
+                file = open('Assets/Emergency_Close.dat', 'w')
+                file.close()
+                break
+            file.close()
             time.sleep(2)
         status = False
         if current_price >= goal_price:
@@ -74,6 +82,16 @@ class CCI:
         elif current_price <= stop_price:
             self.__connection.close_market_order(clientOid='heisen_order')
             msg = f'[-] You loss {(stop_coefficient - 1) * 100}% of your account! see you soon.'
+            if verbose:
+                self.__tel.msg_channel(msg)
+            print(msg)
+        else:
+            notation = ''
+            if current_price > entry_price:
+                notation = '+'
+            else:
+                notation = '-'
+            msg = f'[{notation}] You got {100 * (current_price - entry_price) / (goal_price - entry_price)}% of your account!'
             if verbose:
                 self.__tel.msg_channel(msg)
             print(msg)

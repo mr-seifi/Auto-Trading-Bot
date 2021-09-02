@@ -24,7 +24,7 @@ class Telegram:
     def close(self, update: Update, context: CallbackContext):
         if self.authenticator(update=update):
             update.message.reply_text(text='[+] Your request is being process!')
-            file = open('emergency_close.dat', 'w')
+            file = open('Assets/Emergency_Close.dat', 'w')
             file.write('-1')
             file.close()
 
