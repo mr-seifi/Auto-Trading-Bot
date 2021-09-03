@@ -31,7 +31,7 @@ class Heisen:
                     file = open('Assets/Power.dat', 'r')
                     power = file.read()
                     file.close()
-                    if power:
+                    if power == '1':
                         self.__CCI_obj.cci_5m(symbol_iex='BTCUSDT',
                                               symbol_ta='BTC/USDT',
                                               verbose=True)  # Call 5m cci method that signal user when put an order or when not (5
