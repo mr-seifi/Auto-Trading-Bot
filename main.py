@@ -18,19 +18,20 @@ from secrets import Heisen_API_PASSPHARSE
 iex_obj = IEXCloud(IEX_CLOUD_API_TOKEN)  # Create IEXCloud object that gives the bot last crypto price
 taapi_obj = TAAPI(TAAPI_API_TOKEN)  # Create TAAPI object that gives the bot indicators values
 taapi_obj2 = TAAPI(TAAPI_API_TOKEN_2)
-telegram_obj = Telegram(token=TELEGRAM_BOT_API_TOKEN,
-                        channel_id=TELEGRAM_CHANNEL_ID)  # Create Telegram object that gives the bot the ability
 kucoin_obj = KuCoin(API_NAME=Heisen_API_NAME,
                     API_KEY=Heisen_API_KEY,
                     API_SECRETS=Heisen_API_SECRET,
                     API_PASSPHRASE=Heisen_API_PASSPHARSE)
+telegram_obj = Telegram(token=TELEGRAM_BOT_API_TOKEN,
+                        channel_id=TELEGRAM_CHANNEL_ID,
+                        kucoin_obj=kucoin_obj)  # Create Telegram object that gives the bot the ability
 # of sending logs to telegram channel
 cci_obj = CCI(IEXCloud_obj=iex_obj,
               TAAPI_obj=taapi_obj,
               TAAPI_obj2=taapi_obj2,
               Telegram_obj=telegram_obj,
               KuCoin_connection=kucoin_obj,
-              size=45)  # Create CCI object that gives the bot the ability of technical
+              size=35)  # Create CCI object that gives the bot the ability of technical
 # analysis and get along with cci indicator
 
 
