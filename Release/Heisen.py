@@ -31,11 +31,21 @@ class Heisen:
                     file = open('Assets/Power.dat', 'r')
                     power = file.read()
                     file.close()
+
                     if power == '1':
+                        file = open('Assets/Status.dat', 'w')
+                        file.write('1')
+                        file.close()
+
                         self.__CCI_obj.cci_5m(symbol_iex='BTCUSDT',
                                               symbol_ta='BTC/USDT',
                                               verbose=True)  # Call 5m cci method that signal user when put an order or when not (5
                         # min)
+                    else:
+                        file = open('Assets/Status.dat', 'w')
+                        file.write('0')
+                        file.close()
+
                     time.sleep(17)  # Sleep for 17 second for 2 reason
                     # First. We use free version of TAAPI and for each api request we should wait for 15 sec
                     # Second. For Prevent more than 50% of the cci value noises and wait for gain more confident
