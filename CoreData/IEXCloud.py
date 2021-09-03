@@ -1,4 +1,3 @@
-import pandas as pd
 import requests
 
 # What is IEX Cloud?

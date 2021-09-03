@@ -33,15 +33,15 @@ class KuCoin:
         }
         return headers
 
-    def get_accounts_overview(self, currency='USDT'):
+    def get_available_balance(self, currency='USDT'):
         req_type = 'GET'
         endpoint = f'/api/v1/account-overview?currency={currency}'
         url = f'{self.__BASE_URL}{endpoint}'
         headers = self.authentication(request_type=req_type,
                                       endpoint=endpoint)
         response = requests.request(req_type.lower(), url, headers=headers)
-        print(response.status_code)
-        print(response.json())
+        if response.status_code == 200:
+            return response.json()['data']['availableBalance']
 
     def get_transaction_history(self):
         req_type = 'GET'
