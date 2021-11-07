@@ -50,3 +50,5 @@ class Bva:
             clean_page = BeautifulSoup(r.text, 'html.parser')
             last = re.findall(r'LONG\n((.+)\n(.+))', clean_page.text)[0]
             time.sleep(200)
+
+        return float(last[0]), float(last[1])
