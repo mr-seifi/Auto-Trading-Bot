@@ -3,7 +3,6 @@ import re
 import time
 from bs4 import BeautifulSoup
 from requests_html import HTMLSession
-from HeisenV1.Exchange.KuCoin import KuCoin
 
 
 class Bvs:
