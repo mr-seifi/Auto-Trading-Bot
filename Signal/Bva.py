@@ -5,11 +5,10 @@ from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 
 
-class Bvs:
-    def __init__(self, strategy_number: int, kucoin_obj: KuCoin):
+class Bva:
+    def __init__(self, strategy_number: int):
         self.__NUMBER = strategy_number
         self.__BASE_URL = 'https://bitcoinvsalts.com/strat/%i' % self.__NUMBER
-        self.__connection = kucoin_obj
         if not os.path.isfile('../Assets/%i' % self.__NUMBER):
             f = open(f'{self.__NUMBER}.dat', 'w')
             f.write('0')

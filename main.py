@@ -13,7 +13,7 @@ from secrets import Heisen_API_NAME
 from secrets import Heisen_API_KEY
 from secrets import Heisen_API_SECRET
 from secrets import Heisen_API_PASSPHARSE
-from Signal.Bvs import Bvs
+from Signal.Bva import Bvs
 
 # --------------------------------------------- Create Objects ---------------------------------------------
 iex_obj = IEXCloud(IEX_CLOUD_API_TOKEN)  # Create IEXCloud object that gives the bot last crypto price
