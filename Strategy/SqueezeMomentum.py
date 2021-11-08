@@ -1,7 +1,7 @@
 import time
-from HeisenV1.Signal.Bva import Bva
-from HeisenV1.Exchange.KuCoin import KuCoin
-from HeisenV1.Notification.Telegram import Telegram
+from Signal.Bva import Bva
+from Exchange.KuCoin import KuCoin
+from Notification.Telegram import Telegram
 
 
 class SqueezeMomentum:
@@ -10,30 +10,41 @@ class SqueezeMomentum:
         self.__connection = kucoin_obj
         self.__tel = telegram_obj
 
-    def start(self, verbose=True):
-        while True:
-            new_num, open_position = self.__signal.get_trade_count()
-            while not open_position:
-                new_num, open_position = self.__signal.get_trade_count()
-                time.sleep(200)
-
+    def long_pos(self, verbose: bool):
+        try:
             current_price = self.__connection.get_current_mark_price()
-            entry_price = current_price
-            lots = int((1e5 * self.__size / current_price))
-            self.__connection.place_market_order(clientOid='heisen_order', size=lots)
+            lots = int((1e5 * self.__connection.get_available_balance() / current_price))
+            self.__connection.place_market_order(clientOid='heisen_order', leverage=4, size=lots)
             msg = f'[+] Order executed!\n' \
                   f'\tCurrent_price = {current_price}$'
             if verbose:
                 self.__tel.msg_channel(msg)
             print(msg)
+        except Exception as ex:
+            print(ex)
+            return self.long_pos(verbose)
 
-            long, short = self.__signal.in_position()
-
+    def flat_pos(self, verbose: bool, long: float, short: float):
+        try:
             self.__connection.close_market_order(clientOid='heisen_order')
-            status = False
             msg = f'UnrealisedPNL = {100 * (short - long) / long}%'
             if verbose:
                 self.__tel.msg_channel(msg)
             print(msg)
+        except Exception as ex:
+            print(ex)
+            return self.flat_pos(verbose, long, short)
 
-            time.sleep(200)
+    def start(self, verbose=True):
+        while True:
+            new_num, old_num, open_position = self.__signal.get_trade_count()
+            while not open_position:
+                time.sleep(10)
+                new_num, old_num, open_position = self.__signal.get_trade_count()
+
+            # self.long_pos(verbose)
+            # long, short = self.__signal.in_position()
+            # self.flat_pos(verbose, long, short)
+            self.__tel.msg_channel("Old Num: %i, New Num: %i" % (old_num, new_num))
+
+            time.sleep(10)
