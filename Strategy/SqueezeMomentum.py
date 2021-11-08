@@ -42,9 +42,9 @@ class SqueezeMomentum:
                 time.sleep(10)
                 new_num, old_num, open_position = self.__signal.get_trade_count()
 
-            # self.long_pos(verbose)
-            # long, short = self.__signal.in_position()
-            # self.flat_pos(verbose, long, short)
+            self.long_pos(verbose)
+            long, short = self.__signal.in_position()
+            self.flat_pos(verbose, long, short)
             self.__tel.msg_channel("Old Num: %i, New Num: %i" % (old_num, new_num))
 
             time.sleep(10)
