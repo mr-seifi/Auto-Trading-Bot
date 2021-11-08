@@ -13,7 +13,8 @@ from secrets import Heisen_API_NAME
 from secrets import Heisen_API_KEY
 from secrets import Heisen_API_SECRET
 from secrets import Heisen_API_PASSPHARSE
-from Signal.Bva import Bvs
+from Signal.Bva import Bva
+from Strategy.SqueezeMomentum import SqueezeMomentum
 
 # --------------------------------------------- Create Objects ---------------------------------------------
 iex_obj = IEXCloud(IEX_CLOUD_API_TOKEN)  # Create IEXCloud object that gives the bot last crypto price
@@ -34,7 +35,8 @@ cci_obj = CCI(IEXCloud_obj=iex_obj,
               KuCoin_connection=kucoin_obj,
               size=35)  # Create CCI object that gives the bot the ability of technical
 # analysis and get along with cci indicator
-bvs_obj = Bvs(1504)
+bva_obj = Bva(2028)
+sqz_obj = SqueezeMomentum(bva_obj, kucoin_obj, telegram_obj)
 
 
 # --------------------------------------------- Define Bot Functions ---------------------------------------------
@@ -52,5 +54,4 @@ def emergency_close():
 
 # --------------------------------------------- Execute ---------------------------------------------
 # exec_heisen_bot()
-print("Start!")
-print(bvs_obj.get_trade_count())
+sqz_obj.start(verbose=True)
