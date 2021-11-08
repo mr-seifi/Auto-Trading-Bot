@@ -3,3 +3,4 @@ python_telegram_bot==13.7
 requests==2.22.0
 requests_html==0.10.0
 telegram==0.0.1
+pyppeteer==0.2.2
