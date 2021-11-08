@@ -22,7 +22,10 @@ class Bva:
         try:
             session = HTMLSession()
             r = session.get(self.__BASE_URL)
-            r.html.render(sleep=2, timeout=20)
+            if r.status_code != 200:
+                return self.render()
+            r.html.render(sleep=20, timeout=20)
+            r.close()
             print("[+] Success!")
         except Exception as ex:
             print(ex)
