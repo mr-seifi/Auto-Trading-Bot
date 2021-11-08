@@ -13,10 +13,11 @@ class SqueezeMomentum:
     def long_pos(self, verbose: bool):
         try:
             current_price = self.__connection.get_current_mark_price()
-            lots = int((1e5 * self.__connection.get_available_balance() / current_price))
-            self.__connection.place_market_order(clientOid='heisen_order', leverage=4, size=lots)
+            leverage = '4'
+            lots = int((1e3 * int(leverage) * self.__connection.get_available_balance() / current_price))
+            self.__connection.place_market_order(clientOid='heisen_order', leverage=leverage, size=lots)
             msg = f'[+] Order executed!\n' \
-                  f'\tCurrent_price = {current_price}$'
+                  f'\tCurrent_price = {current_price}$\nlots = {lots}'
             if verbose:
                 self.__tel.msg_channel(msg)
             print(msg)
@@ -45,6 +46,5 @@ class SqueezeMomentum:
             self.long_pos(verbose)
             long, short = self.__signal.in_position()
             self.flat_pos(verbose, long, short)
-            self.__tel.msg_channel("Old Num: %i, New Num: %i" % (old_num, new_num))
 
             time.sleep(10)
